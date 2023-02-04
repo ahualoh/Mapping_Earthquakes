@@ -1,8 +1,8 @@
 // Add console.log to check to see if our code is working.
-console.log("working");
+console.log("If this shows in console, code is working");
 
 // Create the map object with a center and zoom level.
-let map = L.map('mapid').setView([34.0522, -118.2437], 15);
+let map = L.map('mapid').setView([37.6,-95.665], 5);
 
 // Another way to Create the map object with a center and zoom level. Useful when creating multiple layers.
         // let map = L.map("mapid", {
@@ -12,19 +12,32 @@ let map = L.map('mapid').setView([34.0522, -118.2437], 15);
         //     zoom: 4
         //   });
 
-//  Add a marker to the map for Los Angeles, California.
-    L.circle([34.0522, -118.2437], {
-        radius: 300,
-        color: '#000000',
-        fillColor: '#fffa00',
-        fillOpacity: 0.1
-        }).addTo(map);
-    // CircleMarkers don't change in size - it will stay the same no matter what level of zoom you're in on the map
-        // L.circleMarker([34.0522, -118.2437], {
-        //     radius: 300,
-        //     color: 'black',
-        //     fillColor: 'yellow',
-        // }).addTo(map);
+//  Add markers to the map...
+// Replace the marker variable with the cities variable 
+// that references the five most populous cities array.
+let cityData = cities;  
+
+// // Loop through the cities array and create one marker for each city. 2 ways:
+/// cities.forEach(function(city)) 
+// OR 
+/// for (let i = 0; i < cities.length; i++)
+console.log("Cities array: ")
+
+cityData.forEach(function(city) {
+    console.log(city)
+
+    numFormatter = Intl.NumberFormat('en-US');
+    popThousand = numFormatter.format(city.population);
+    console.log(popThousand);
+
+    L.circleMarker(city.location, {
+        radius: city.population/200000,
+        lineweight: 4,
+        color: 'orange'
+    })
+    .bindPopup("<h2>" + city.city + ", " + city.state + "</h2> <hr> <h3>Population " + popThousand + "</h3>")
+  .addTo(map);
+   });
 
 // We create the tile layer that will be the background of our map.
 let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -35,3 +48,4 @@ attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap
 
 // Then we add our 'graymap' tile layer to the map.
 streets.addTo(map);
+

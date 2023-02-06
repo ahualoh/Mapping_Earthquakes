@@ -1,5 +1,5 @@
 // Add console.log to check to see if our code is working.
-console.log("If this shows in console, code is working")
+//console.log(“If this shows in console, code is working”);
 
 // Create the tile layer that will be the background of our map.
 let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -23,7 +23,7 @@ let baseMaps = {
 
 // Create the map object with center, zoom level and default layer.
 let map = L.map('mapid', {
-  center: [44.0, -80.0],
+  center: [30, 30],
   zoom: 2,
   layers: [streets]
 });
@@ -31,32 +31,24 @@ let map = L.map('mapid', {
 // Pass our map layers into our layers control and add the layers control to the map.
 L.control.layers(baseMaps).addTo(map);
 
-// Accessing the Toronto airline routes GeoJSON URL.
-let torontoData = "https://raw.githubusercontent.com/ahualoh/Mapping_Earthquakes/Mapping_GeoJSON_Linestrings/torontoRoutes.json";
-console.log("Toronto Data Path")
-console.log(torontoData)
-
-// Create a style for the lines.
-let myStyle = {
-  color: "#ffffa1",
-  weight: 2
-}
+// Add GeoJSON data.
+// Accessing the airport GeoJSON URL
+let airportData = "https://raw.githubusercontent.com/ahualoh/Mapping_Earthquakes/Mapping_GeoJSON_Points/majorAirports.json";
 
 // Grabbing our GeoJSON data.
-d3.json(torontoData).then(function(data) {
+d3.json(airportData).then(function(data) {
   console.log("JSON data: ");
   console.log(data);
-  // Creating a GeoJSON layer with the retreived data.
   L.geoJson(data, {
-    style: myStyle,
-    onEachFeature: function(feature, layer) {
+    // We turn each feature into a marker on the map.
+    pointToLayer: function(feature, latlng) {
       console.log("geoJSON objects: ");
       console.log(feature);
-      layer.bindPopup("<h2>" + "Airport Code: " + feature.properties.airline+ "</h2>"
+      return L.marker(latlng).bindPopup("<h2>" + "Airport Code: " 
+      + feature.properties.faa+ "</h2>"
       + "<hr>" 
-      + "<h3>" + "Destination: " 
-      + "<br>" + "<i>" + feature.properties.dst + "</i>"+  "</h3>");
+      + "<h3>" + "Airport Name: " 
+      + "<br>" + "<i>" + feature.properties.name + "</i>"+  "</h3>");
      }
   }).addTo(map);
 });
-

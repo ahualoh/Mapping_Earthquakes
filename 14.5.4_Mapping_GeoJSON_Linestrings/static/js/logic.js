@@ -59,4 +59,3 @@ d3.json(torontoData).then(function(data) {
      }
   }).addTo(map);
 });
-

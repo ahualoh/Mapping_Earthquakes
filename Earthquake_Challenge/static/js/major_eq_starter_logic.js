@@ -30,12 +30,12 @@ let baseMaps = {
 
 // 1. Add a 3rd layer group for the major earthquake data.
 let allEarthquakes = new L.LayerGroup();
-
+let majorEarthquakes =  new L.LayerGroup();
 
 // 2. Add a reference to the major earthquake group to the overlays object.
 let overlays = {
   "Earthquakes": allEarthquakes,
-
+  "Major Earthquakes": majorEarthquake
 };
 
 // Then we add a control to the map that will allow the user to change which
@@ -109,7 +109,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
   allEarthquakes.addTo(map);
 
 // 3. Retrieve the major earthquake GeoJSON data >4.5 mag for the week.
-d3.json().then(function(data) {
+d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson").then(function(data) {
 
 // 4. Use the same style as the earthquake data.
 
